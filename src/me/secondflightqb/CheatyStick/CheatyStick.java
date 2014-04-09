@@ -168,15 +168,7 @@ public class CheatyStick extends JavaPlugin implements Listener{
 				
 				InventoryHelper.storeHotbar(player, player.getInventory().getItem(0), player.getInventory().getItem(1), player.getInventory().getItem(2), player.getInventory().getItem(3), player.getInventory().getItem(4), player.getInventory().getItem(5), player.getInventory().getItem(6), player.getInventory().getItem(7), player.getInventory().getItem(8));
 				
-				player.getInventory().setItem(0, null);
-				player.getInventory().setItem(1, null);
-				player.getInventory().setItem(2, null);
-				player.getInventory().setItem(3, null);
-				player.getInventory().setItem(4, null);
-				player.getInventory().setItem(5, null);
-				player.getInventory().setItem(6, null);
-				player.getInventory().setItem(7, null);
-				player.getInventory().setItem(8, null);
+				for (int i = 0; i < 9; ++i) { player.getInventory().setItem(i, null); }
 				
 				if (player.getAllowFlight() == false) {
 					player.getInventory().setItem(0, guiScreenMain1_1);
