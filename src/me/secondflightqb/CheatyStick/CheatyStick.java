@@ -1,7 +1,5 @@
 package me.secondflightqb.CheatyStick;
 
-import me.secondflightqb.CheatyStick.InventoryStringDeSerializer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,24 +34,6 @@ public class CheatyStick extends JavaPlugin implements Listener{
 
 	public final Logger logger = Logger.getLogger("Minecraft");
 	public static CheatyStick plugin;
-	
-	//public String inv1;
-	//public String inv2;
-	//public String inv3;
-	//public String inv4;
-	//public String inv5;
-	//public String inv6;
-	//public String inv7;
-	//public String inv8;
-	//public String inv9;
-	
-	//private ProtocolManager protocolManager;
-	
-	//Things to do when loading
-	//@Override
-	//public void onLoad() {
-		//protocolManager = ProtocolLibrary.getProtocolManager();
-	//}
 	
 	
 	//prints text to console when disabled
