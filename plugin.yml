@@ -1,0 +1,10 @@
+name: CheatyStick
+main: me.secondflightqb.CheatyStick.CheatyStick
+version: 0.01
+description: >
+                 Admin tool designed as a quick alternative to commands
+commands:
+  cheatystick:
+    description: Spawns CheatyStick
+  test:
+    description: test
