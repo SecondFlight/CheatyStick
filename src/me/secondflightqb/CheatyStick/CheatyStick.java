@@ -21,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -53,6 +54,8 @@ public class CheatyStick extends JavaPlugin implements Listener{
 	}
 
 	static Map<String, Boolean> stickIsActive = new HashMap<String, Boolean>();
+	
+	static Map<String, Boolean> isInvincible = new HashMap<String, Boolean>();
 	
 	//defines stick item
 	public ItemStack stickItemStack = (new ItemStack(Material.STICK)); 
@@ -118,6 +121,62 @@ public class CheatyStick extends JavaPlugin implements Listener{
 		guiScreenMain1_2.setItemMeta(meta);
 	}
 	
+	public ItemStack guiScreenFly1_1 = (new ItemStack(Material.FEATHER)); {
+		ItemMeta meta = guiScreenFly1_1.getItemMeta();
+		List<String> lore = new ArrayList<String>();
+		
+		lore.add(ChatColor.DARK_AQUA + "Left-click: select player");
+		lore.add(ChatColor.DARK_AQUA + "Right-click: toggle flying on/off");
+		lore.add(ChatColor.DARK_AQUA + "Flight: " + ChatColor.RED + "OFF");
+		
+		meta.setDisplayName(ChatColor.GOLD + "Flying");
+		meta.setLore(lore);
+		
+		guiScreenFly1_1.setItemMeta(meta);
+	}
+	
+	public ItemStack guiScreenFly1_2 = (new ItemStack(Material.FEATHER)); {
+		ItemMeta meta = guiScreenFly1_2.getItemMeta();
+		List<String> lore = new ArrayList<String>();
+		
+		lore.add(ChatColor.DARK_AQUA + "Left-click: select player");
+		lore.add(ChatColor.DARK_AQUA + "Right-click: toggle flying on/off");
+		lore.add(ChatColor.DARK_AQUA + "Flight: " + ChatColor.GREEN + "ON");
+		
+		meta.setDisplayName(ChatColor.GOLD + "Flying");
+		meta.setLore(lore);
+		
+		guiScreenFly1_2.setItemMeta(meta);
+	}
+	
+	public ItemStack guiScreenFly2_1 = (new ItemStack(Material.FEATHER)); {
+		ItemMeta meta = guiScreenFly2_1.getItemMeta();
+		List<String> lore = new ArrayList<String>();
+		
+		lore.add(ChatColor.DARK_AQUA + "Left-click: select player");
+		lore.add(ChatColor.DARK_AQUA + "Right-click: toggle invincibility on/off");
+		lore.add(ChatColor.DARK_AQUA + "Invincibility: " + ChatColor.RED + "OFF");
+		
+		meta.setDisplayName(ChatColor.GOLD + "Invincibility");
+		meta.setLore(lore);
+		
+		guiScreenFly2_1.setItemMeta(meta);
+	}
+	
+	public ItemStack guiScreenFly2_2 = (new ItemStack(Material.FEATHER)); {
+		ItemMeta meta = guiScreenFly2_2.getItemMeta();
+		List<String> lore = new ArrayList<String>();
+		
+		lore.add(ChatColor.DARK_AQUA + "Left-click: select player");
+		lore.add(ChatColor.DARK_AQUA + "Right-click: toggle invincibility on/off");
+		lore.add(ChatColor.DARK_AQUA + "Invincibility: " + ChatColor.GREEN + "ON");
+		
+		meta.setDisplayName(ChatColor.GOLD + "Invincibility");
+		meta.setLore(lore);
+		
+		guiScreenFly2_2.setItemMeta(meta);
+	}
+	
 	//listener for click
 	@EventHandler
 	public void clickListener(PlayerInteractEvent event) {
@@ -160,8 +219,30 @@ public class CheatyStick extends JavaPlugin implements Listener{
 				
 				player.getInventory().setItem(8, exitItem);
 			}
+			
+			if (item.hasItemMeta() 
+					&& item.getItemMeta().hasDisplayName()
+					&& item.getItemMeta().hasLore() 
+					&& item.getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Flying/Invincibility") 
+					&& item.getItemMeta().getLore().contains(ChatColor.DARK_AQUA + "Left-click: open sub-menu")) {
+			
+				for (int i = 0; i < 9; ++i) { player.getInventory().setItem(i, null); }
+				
+				if(player.getAllowFlight() == false) {
+					player.getInventory().setItem(0, guiScreenFly1_1);
+				} else if(player.getAllowFlight() == true) {
+					player.getInventory().setItem(0, guiScreenFly1_2);
+				}
+				
+				if(isInvincible.get(player.getDisplayName()) == false) {
+					player.getInventory().setItem(1, guiScreenFly2_1);
+				} else if(isInvincible.get(player.getDisplayName()) == true) {
+					player.getInventory().setItem(1, guiScreenFly2_2);
+				}
+				
+				player.getInventory().setItem(8, exitItem);
+			}
 		}
-		
 		if(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Player player = event.getPlayer();
 			ItemStack item = player.getItemInHand();
@@ -192,6 +273,50 @@ public class CheatyStick extends JavaPlugin implements Listener{
 					
 				}
 			}
+			
+			if (item.hasItemMeta() 
+					&& item.getItemMeta().hasDisplayName()
+					&& item.getItemMeta().hasLore() 
+					&& item.getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Flying") 
+					&& item.getItemMeta().getLore().contains(ChatColor.DARK_AQUA + "Right-click: toggle flying on/off")) {
+				
+				if(player.getAllowFlight() == false) {
+					player.setAllowFlight(true);
+					player.getInventory().setItem(0, guiScreenFly1_2);
+					
+					player.playSound(player.getLocation(), Sound.NOTE_PIANO, 10, (float) 1.2);
+					
+				} else if(player.getAllowFlight() == true) {
+					player.setAllowFlight(false);
+					player.getInventory().setItem(0, guiScreenFly1_1);
+					
+					player.playSound(player.getLocation(), Sound.NOTE_PIANO, 10, (float) 0.8);
+					
+				}
+			}
+			
+			if (item.hasItemMeta() 
+					&& item.getItemMeta().hasDisplayName()
+					&& item.getItemMeta().hasLore() 
+					&& item.getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Invincibility")
+					&& item.getItemMeta().getLore().contains(ChatColor.DARK_AQUA + "Right-click: toggle invincibility on/off")) {
+				
+				
+				if(isInvincible.get(player.getDisplayName()) == false) {
+					isInvincible.put(player.getDisplayName(), true);
+					player.getInventory().setItem(1, guiScreenFly2_2);
+					
+					player.playSound(player.getLocation(), Sound.NOTE_PIANO, 10, (float) 1.2);
+					
+				} else if(isInvincible.get(player.getDisplayName()) == true) {
+					isInvincible.put(player.getDisplayName(), false);
+					player.getInventory().setItem(1, guiScreenFly2_1);
+					
+					player.playSound(player.getLocation(), Sound.NOTE_PIANO, 10, (float) 0.8);
+					
+				}
+			}
+			
 		}
 	}
 	
@@ -201,11 +326,22 @@ public class CheatyStick extends JavaPlugin implements Listener{
 		
 		if (entity instanceof Player) {
 			Player player = (Player) entity;
-			if (stickIsActive.get(player.getDisplayName()) == true) {
+			if (stickIsActive.get(player.getDisplayName()) == true && isInvincible.get(player.getDisplayName()) == false) {
 				InventoryHelper.restoreHotbar(player);
 				stickIsActive.put(player.getDisplayName(), false);
 			}
+			
+			if (isInvincible.get(player.getDisplayName()) == true) {
+				event.setCancelled(true);
+			}
+		
 		}
+	}
+	
+	@EventHandler
+	public void logonListener(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		isInvincible.put(player.getDisplayName(), false);
 	}
 	
 	
