@@ -38,3 +38,8 @@ But I doooooo
 =============
 
 Go home, you're drunk.
+
+Is this on BukkitDev or anywhere else?
+======================================
+
+No. I will put it on BukkitDev once it's actually useful, has a full feature-set, and is free of serious known bugs.
